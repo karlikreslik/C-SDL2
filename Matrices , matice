@@ -9,7 +9,7 @@ V počítačové grafice jsou matice jako kouzelné hůlky, které umožňují t
 1. Základní transformace pomocí matic
 Všechny transformace (posun, otočení, změna velikosti) se dají vyjádřit maticemi. Obvykle používáme 3×3 matice pro 2D nebo 4×4 pro 3D, ale my zůstaneme u 2D, protože SDL2 je hlavně o 2D grafice.
 
-a) Posun (Translate) – "Knedlík, pojď sem!"
+a) Posun (Translate) – "Knedlíku, pojď sem!"
 Chceš-li posunout objekt o (tx, ty), použiješ matici:
 
 | 1  0  tx |
