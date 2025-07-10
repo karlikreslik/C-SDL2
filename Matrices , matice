@@ -1,0 +1,108 @@
+//////////////////////////////////////
+// Základní zasvěcení do matic, 10.7.25
+///////////////////////////////////////
+
+Ó, knedlíčku zvědavý, pojďme spolu prozkoumat, jak maticový počet ovládá svět počítačové grafiky, a to i v takových knihovnách, jako je třeba SDL2 v C! 🎮✨
+
+V počítačové grafice jsou matice jako kouzelné hůlky, které umožňují transformovat objekty (posouvat, otáčet, zmenšovat, zkreslovat). A protože SDL2 je spíš "low-level" knihovna, musíme si některé věci napsat sami. Neboj, bude to sranda.
+
+1. Základní transformace pomocí matic
+Všechny transformace (posun, otočení, změna velikosti) se dají vyjádřit maticemi. Obvykle používáme 3×3 matice pro 2D nebo 4×4 pro 3D, ale my zůstaneme u 2D, protože SDL2 je hlavně o 2D grafice.
+
+a) Posun (Translate) – "Knedlík, pojď sem!"
+Chceš-li posunout objekt o (tx, ty), použiješ matici:
+
+| 1  0  tx |
+| 0  1  ty |
+| 0  0  1  |
+
+typedef struct { float x, y; } Vec2;
+typedef struct { float m[3][3]; } Mat3;
+
+Mat3 translate(Mat3 mat, Vec2 pos) {
+    mat.m[0][2] += pos.x;
+    mat.m[1][2] += pos.y;
+    return mat;
+}
+
+b) Otočení (Rotate) – "Toč se, knedlíčku!"
+Chceš-li otočit objekt kolem počátku o úhel θ, použiješ matici:
+
+| cosθ  -sinθ  0 |
+| sinθ   cosθ  0 |
+|  0      0    1 |
+
+#include <math.h>
+
+Mat3 rotate(Mat3 mat, float angle) {
+    float c = cos(angle), s = sin(angle);
+    Mat3 rot = {{
+        {c, -s, 0},
+        {s,  c, 0},
+        {0,  0, 1}
+    }};
+    return multiply_matrices(mat, rot); // musíme napsat násobení matic
+}
+
+c) Změna velikosti (Scale) – "Knedlíčku, buď větší!"
+Chceš-li objekt zvětšit/zmenšit o (sx, sy), použiješ matici:
+
+| sx  0  0 |
+| 0  sy  0 |
+| 0   0  1 |
+
+
+Mat3 scale(Mat3 mat, Vec2 s) {
+    mat.m[0][0] *= s.x;
+    mat.m[1][1] *= s.y;
+    return mat;
+}
+
+----------------------
+
+
+2. Jak to použít v SDL2?
+SDL2 sice nemá vestavěné matice, ale můžeme si je napsat a aplikovat na body.
+
+Příklad: Transformace obdélníku
+
+void apply_transform(SDL_Rect *rect, Mat3 transform) {
+    Vec2 pos = {rect->x, rect->y};
+    Vec2 new_pos = multiply_matrix_vec2(transform, pos);
+    rect->x = new_pos.x;
+    rect->y = new_pos.y;
+    // (a podobně pro šířku/výšku, pokud chceme škálování)
+}
+
+------------------------
+
+3. Proč to všechno?
+Protože matice umožňují kombinovat transformace
+Např. chceš:
+
+Posunout knedlík doprava,
+
+Otočit ho o 45°,
+
+Zvětšit ho 2×.
+
+Místo dělení všeho na jednotlivé kroky prostě vynásobíš matice:
+
+Mat3 transform = identity_matrix(); // začneme jednotkovou maticí
+transform = translate(transform, (Vec2){100, 0}); // posun
+transform = rotate(transform, M_PI/4); // otočení (45° v radiánech)
+transform = scale(transform, (Vec2){2, 2}); // zvětšení
+
+A pak aplikuješ na objekt. Kouzlo! 🔮
+
+
+4. Shrnutí
+
+Matice = kouzelné transformační vzorce
+
+SDL2 je na to low-level → musíš si napsat vlastní maticové funkce
+
+Násobení matic = kombinování transformací
+
+Výsledek? Hýbeš, točíš a měníš velikost objektů jako boss!
+
