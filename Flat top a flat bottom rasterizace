@@ -1,0 +1,27 @@
+///////////////////////////////////////////////
+// Flat top a flat bottom rasterizace, 10.7.25
+///////////////////////////////////////////////
+
+
+Takže máš tady dva triky, jak rozsekat trojúhelník na pixelové placičky – a ano, je to trochu opruz, ale neboj, vysvětlím ti to jako polévku, co tě neosype.
+
+1. Flat Bottom (ploché dno) 🍑
+Představ si trojúhelník, co vypadá jako hromádka – špička nahoře a dole má rovnou linku (jako kdybys mu usekl zadek). Rozkrájíme ho na horizontální řádky (jako když krájíš šunku) a v každé řádce spočítáme, kde začíná a končí.
+
+Proč je to super? Protože levý a pravý okraj jsou jen přímky – žádný záludný křivky.
+
+2. Flat Top (plochý strop) 🍅
+Tady je to naopak – trojúhelník má rovnou čáru NAHOŘE a špičku dole (jako obrácená čepice). Zase ho krájíme na řádky, ale tentokrát od shora dolů.
+
+V čem je sranda? Stejně jako u Flat Bottomu – boční hrany jsou jednoduché, takže výpočty jsou v pohodě.
+
+Proč to dělat? 🤔
+Protože obecný trojúhelník může být potvora (má špičku nahoře i dole). Tak ho chytře rozsekneš na dva – jeden Flat Bottom a jeden Flat Top – a pak už jen mazlíš dva jednoduché kousky.
+
+TL;DR:
+Flat Bottom = trojúhelník s placatým zadkem 🍑 → řežeš od špičky dolů.
+
+Flat Top = trojúhelník s placatou hlavou 🎩 → řežeš od hlavy dolů.
+
+Knedlíček se neposere, jen si musí uvědomit, že i trojúhelníky se dají krájet jako salám. 🎨🔺
+
