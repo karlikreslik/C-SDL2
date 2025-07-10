@@ -1,6 +1,6 @@
-//////////////////////////////////////
-// Základní zasvěcení do matic, 10.7.25
-///////////////////////////////////////
+/////////////////////////////////
+// Základní zasvěcení do matic
+/////////////////////////////////
 
 Ó, knedlíčku zvědavý, pojďme spolu prozkoumat, jak maticový počet ovládá svět počítačové grafiky, a to i v takových knihovnách, jako je třeba SDL2 v C! 🎮✨
 
@@ -58,6 +58,106 @@ Mat3 scale(Mat3 mat, Vec2 s) {
     return mat;
 }
 
+
+d) Projekce (Projection)
+
+Projekce je jako fotka z dovolené: 3D realitu (tvoje tvář po pátém knedlíku) splácneš na 2D plátno (Instagram). V počítačové grafice máme dva hlavní typy:
+
+1. Ortografická projekce (2D/3D bez perspektivy) – "Knedlík jako pravítko"
+Používá se v 2D hrách (Pixel Art, strategie) nebo v CAD.
+
+Všechny objekty mají stejnou velikost, bez ohledu na vzdálenost.
+
+Matice pro ortografickou projekci v 2D (SDL2 styl):
+
+
+| 2/width    0         -1 |
+|    0    -2/height     1 |  
+|    0        0         1 |
+
+
+(Převádí souřadnice z rozsahu [0, width] a [0, height] na [-1, 1], což je užitečné pro shadery.)
+
+V kódu (C):
+
+Mat3 ortho(float width, float height) {
+    return (Mat3) {{
+        { 2.0f/width,      0,       -1 },
+        {     0,     -2.0f/height,   1 },  // (minus Y, protože SDL2 má Y dolů!)
+        {     0,            0,        1 }
+    }};
+}
+
+
+2. Perspektivní projekce (3D s iluzí hloubky) – "Knedlík v prostoru!"
+Používá se v 3D hrách (Minecraft, Elden Ring).
+
+Objekty se zmenšují s vzdáleností.
+
+Matice pro perspektivu v 3D (pro SDL2 bys musel kombinovat s 3D → 2D transformací):
+
+text
+| f/aspect  0         0              0 |
+| 0         f         0              0 |
+| 0         0    -(far+near)/(far-near)  -2*far*near/(far-near) |
+| 0         0        -1              0 |
+(Kde f = cot(pole_vyhleni/2), aspect = šířka/výška)
+
+Pro SDL2 bys to musel "ořezat" na 2D, protože SDL2 neumí 3D přímo. Ale můžeš simulovat perspektivu ručně (viz níže).
+
+Jak použít projekci v SDL2?
+SDL2 je 2D knihovna, ale můžeš si projekci napodobit:
+
+Příklad: "Falešná 3D perspektiva" pro knedlíky
+
+
+// Transformace bodu s "hloubkou" (z)
+Vec2 project_fake_3d(Vec3 point, float fov) {
+    float scale = fov / (fov + point.z);  // zmenšování s vzdáleností
+    return (Vec2){ point.x * scale, point.y * scale };
+}
+
+// Použití:
+Vec3 knedlik_3d = { 100, 50, 20 };  // x, y, z
+Vec2 knedlik_2d = project_fake_3d(knedlik_3d, 500.0f);
+SDL_Rect rect = { knedlik_2d.x, knedlik_2d.y, 50, 50 };
+SDL_RenderFillRect(renderer, &rect);  // vykreslíš "3D" knedlík!
+
+
+Proč to funguje?
+Ortografie: Všechny knedlíky jsou stejně velké → ideální pro Pong nebo šachy.
+
+Perspektiva: Blízké knedlíky jsou větší → vytvoříš iluzi 3D (i když SDL2 nemá 3D vykreslování).
+
+Zábavné využití v SDL2
+Dungeon crawler s "falešnými 3D" stěnami:
+
+Vykresluj čáry s měnící se tloušťkou podle vzdálenosti.
+
+Paralaxní scrolling:
+
+Vrstvy pozadí se pohybují různou rychlostí (simulace hloubky).
+
+Pixel-artový svět s izometrickou projekcí:
+
+Použij ortografickou projekci s otočením o 45°.
+
+------------------------
+
+Shrnutí pro knedlíky
+Ortografická projekce = Všechno stejně velké (2D).
+
+Perspektivní projekce = Vzdálené věci menší (3D iluze).
+
+SDL2 je 2D → musíš si projekci napodobit chytře.
+
+Knedlík v 3D? Použij project_fake_3d() a předstírej, že jsi John Carmack!
+
+Teď už víš všechny tajné matrixové formule! 🎩✨ Ukaž světu, jak se transformuje knedlík jako profík!
+
+(P.S.: Pokud chceš skutečné 3D v C, koukni na OpenGL nebo Vulkan )
+
+
 ----------------------
 
 
@@ -95,7 +195,7 @@ transform = scale(transform, (Vec2){2, 2}); // zvětšení
 
 A pak aplikuješ na objekt. Kouzlo! 🔮
 
-
+-----------------------------
 4. Shrnutí
 
 Matice = kouzelné transformační vzorce
