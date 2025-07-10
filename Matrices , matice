@@ -104,5 +104,117 @@ SDL2 je na to low-level → musíš si napsat vlastní maticové funkce
 
 Násobení matic = kombinování transformací
 
-Výsledek? Hýbeš, točíš a měníš velikost objektů jako boss!
+
+///////////////////////////////////////
+// Basic Initiation to Matrices, 10.7.25
+///////////////////////////////////////
+
+Oh, curious little dumpling, let’s explore together how matrix math rules the world of computer graphics—even in libraries like SDL2 in C! 🎮✨
+
+In computer graphics, matrices are like magic wands that let you transform objects (move, rotate, scale, skew). And since SDL2 is a rather "low-level" library, we have to write some things ourselves. Don’t worry, it’ll be fun.
+
+---
+
+### 1. Basic Transformations Using Matrices  
+All transformations (translation, rotation, scaling) can be expressed using matrices. We typically use 3×3 matrices for 2D or 4×4 for 3D, but we’ll stick to 2D since SDL2 is mainly for 2D graphics.  
+
+#### a) Translation – "Little dumpling, come here!"  
+If you want to move an object by (tx, ty), you use this matrix:  
+| 1 0 tx |
+| 0 1 ty |
+| 0 0 1 |
+
+typedef struct { float x, y; } Vec2;
+typedef struct { float m[3][3]; } Mat3;
+
+Mat3 translate(Mat3 mat, Vec2 pos) {
+    mat.m[0][2] += pos.x;
+    mat.m[1][2] += pos.y;
+    return mat;
+}
+b) Rotation – "Spin, little dumpling!"
+If you want to rotate an object around the origin by angle θ, use this matrix:
+
+| cosθ  -sinθ  0 |
+| sinθ   cosθ  0 |
+|  0      0    1 |
+
+
+
+#include <math.h>
+
+Mat3 rotate(Mat3 mat, float angle) {
+    float c = cos(angle), s = sin(angle);
+    Mat3 rot = {{
+        {c, -s, 0},
+        {s,  c, 0},
+        {0,  0, 1}
+    }};
+    return multiply_matrices(mat, rot); // We need to write matrix multiplication
+}
+c) Scaling – "Little dumpling, grow bigger!"
+If you want to scale an object by (sx, sy), use this matrix:
+
+text
+| sx  0  0 |
+| 0  sy  0 |
+| 0   0  1 |
+
+
+Mat3 scale(Mat3 mat, Vec2 s) {
+    mat.m[0][0] *= s.x;
+    mat.m[1][1] *= s.y;
+    return mat;
+}
+
+2. How to Use This in SDL2?
+SDL2 doesn’t have built-in matrices, but we can write our own and apply them to points.
+
+Example: Transforming a Rectangle
+
+c
+void apply_transform(SDL_Rect *rect, Mat3 transform) {
+    Vec2 pos = {rect->x, rect->y};
+    Vec2 new_pos = multiply_matrix_vec2(transform, pos);
+    rect->x = new_pos.x;
+    rect->y = new_pos.y;
+    // (and similarly for width/height if we want scaling)
+}
+
+
+3. Why All This?
+Because matrices let you combine transformations!
+For example, you want to:
+
+Move the dumpling to the right,
+
+Rotate it by 45°,
+
+Scale it 2×.
+
+Instead of doing everything step by step, just multiply the matrices:
+
+Mat3 transform = identity_matrix(); // Start with identity matrix
+transform = translate(transform, (Vec2){100, 0}); // Move  
+transform = rotate(transform, M_PI/4); // Rotate (45° in radians)  
+transform = scale(transform, (Vec2){2, 2}); // Scale  
+Then apply it to your object. Magic! 🔮
+
+4. Summary
+Matrices = magical transformation formulas
+
+SDL2 is low-level → You need to write your own matrix functions
+
+Matrix multiplication = combining transformations
+
+Result? You move, rotate, and scale objects like a boss!
+
+text
+
+### Key Notes:  
+- Kept the playful tone ("little dumpling") for charm.  
+- Used `θ` for theta in math notation.  
+- Structured code blocks for clarity.  
+- Preserved markdown formatting for headings and lists.  
+
 
