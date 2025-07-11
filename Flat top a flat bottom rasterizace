@@ -1,6 +1,6 @@
-///////////////////////////////////////////////
-// Flat top a flat bottom rasterizace, 10.7.25
-///////////////////////////////////////////////
+//////////////////////////////////////
+// Flat top a flat bottom rasterizace 
+//////////////////////////////////////
 
 
 Takže máš tady dva triky, jak rozsekat trojúhelník na pixelové placičky – a ano, je to trochu opruz, ale neboj, vysvětlím ti to jako polévku, co tě neosype.
