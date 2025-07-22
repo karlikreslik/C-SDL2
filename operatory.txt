@@ -1,0 +1,120 @@
+1. Aritmetické operátory
+Používají se pro základní matematické operace:
+
++ ➝ sčítání (a + b)
+
+- ➝ odčítání (a - b)
+
+* ➝ násobení (a * b)
+
+/ ➝ dělení (a / b)
+
+Pozor: U celých čísel (int) je výsledek celočíselný (např. 5 / 2 = 2).
+
+% ➝ zbytek po dělení (modulo) (a % b)
+
+Např. 5 % 2 = 1 (zbytek po dělení 5 / 2).
+
+2. Relační (porovnávací) operátory
+Porovnávají hodnoty a vrací true (1) nebo false (0):
+
+== ➝ rovnost (a == b)
+
+Pozor: Neplést s = (přiřazení)!
+
+!= ➝ nerovnost (a != b)
+
+> ➝ větší než (a > b)
+
+< ➝ menší než (a < b)
+
+>= ➝ větší nebo rovno (a >= b)
+
+<= ➝ menší nebo rovno (a <= b)
+
+3. Logické operátory
+Pracují s logickými hodnotami (true/false):
+
+&& ➝ logické A (AND) (a && b)
+
+true, pouze pokud obě strany jsou true.
+
+|| ➝ logické NEBO (OR) (a || b)
+
+true, pokud alespoň jedna strana je true.
+
+! ➝ logická negace (NOT) (!a)
+
+Obrátí hodnotu: !true → false.
+
+4. Bitové operátory
+Provádějí operace s jednotlivými bity:
+
+& ➝ bitové A (AND) (a & b)
+
+| ➝ bitové NEBO (OR) (a | b)
+
+^ ➝ bitové XOR (exkluzivní OR) (a ^ b)
+
+~ ➝ bitová negace (NOT) (~a)
+
+<< ➝ posun vlevo (násobení 2<sup>n</sup>) (a << n)
+
+>> ➝ posun vpravo (dělení 2<sup>n</sup>) (a >> n)
+
+Příklad:
+
+c
+int x = 5;       // 0101 (binárně)
+int y = x << 1;  // 1010 (10 v decimální soustavě)
+5. Přiřazovací operátory
+Přiřazují hodnoty proměnným:
+
+= ➝ základní přiřazení (a = 5)
+
++= ➝ přičtení (a += 3 ⇔ a = a + 3)
+
+-= ➝ odečtení (a -= 2)
+
+*= ➝ vynásobení (a *= 4)
+
+/= ➝ dělení (a /= 2)
+
+%= ➝ modulo (a %= 3)
+
+&= ➝ bitové AND přiřazení (a &= b)
+
+|= ➝ bitové OR přiřazení (a |= b)
+
+^= ➝ bitové XOR přiřazení (a ^= b)
+
+<<= ➝ bitový posun vlevo (a <<= 1)
+
+>>= ➝ bitový posun vpravo (a >>= 1)
+
+6. Speciální operátory
+& ➝ adresa proměnné (např. &x → vrátí pointer na x)
+
+* ➝ dereference pointeru (např. *ptr → hodnota na adrese ptr)
+
+?: ➝ ternární operátor (podmínka ? hodnota1 : hodnota2)
+
+Např. int max = (a > b) ? a : b;
+
+sizeof() ➝ vrátí velikost proměnné/datového typu v bytech (sizeof(int))
+
+, ➝ odděluje výrazy (např. v cyklu for).
+
+Příklad použití několika operátorů:
+c
+int a = 10, b = 20;
+if ((a > 5) && (b < 30)) {  // Logické AND
+    int soucet = a + b;      // Aritmetický operátor
+    printf("Součet: %d\n", soucet);
+}
+Důležité upozornění:
+Záměna = a == je častá chyba:
+
+if (x = 5) ➝ přiřadí 5 do x a vždy je true!
+
+if (x == 5) ➝ správné porovnání.
